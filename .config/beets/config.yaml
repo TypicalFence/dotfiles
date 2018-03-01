@@ -1,0 +1,14 @@
+directory: /drives/archive/Music/beets
+library: /drives/archive/Music/beets/beets.db
+plugins: discogs copyartifacts
+original_date: yes
+import:
+        move: yes
+paths:
+        default: Unsorted/$albumartist/$year - $album%aunique{}/$track - $artist  - $title
+        cat:hiphop: Genres/HipHop/$albumartist/$year - $album%aunique{}/$track - $artist  - $title
+        cat:metal: Genres/Metal/$albumartist/$year - $album%aunique{}/$track - $artist  - $title
+        cat:rock: Genres/Rock/$albumartist/$year - $album%aunique{}/$track - $artist  - $title
+        cat:electro: Genres/Electro/$albumartist/$year - $album%aunique{}/$track - $artist  - $title
+        cat:chiptune: Genres/Chiptune/$albumartist/$year - $album%aunique{}/$track - $artist  - $title
+        cat:touhou: Touhou/$albumartist/$year - $album%aunique{}/$track - $artist  - $title   
