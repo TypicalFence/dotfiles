@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+dir=$PWD
+cd ~
+cp $1 $dir --parents
+cd $dir
