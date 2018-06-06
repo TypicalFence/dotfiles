@@ -1,0 +1,61 @@
+#!/usr/bin/hy
+(require [hy.extra.anaphoric [*]])
+(import [os [listdir]])
+(import [os.path [getsize isdir exists]])
+
+;; Logic
+(defn calc_dir [path]
+  (ap-reduce (+ (get_file_size (+ path "/" it)) acc) (listdir path) 0 ))
+
+(defn get_file_size [path]
+  (if (isdir path)
+      (calc_dir path)
+      (getsize path)))
+
+
+;; Fancy-ish Output
+(defn is_x [x kind] (not (< (/ x kind) 1)))
+
+(defn is_kilo [x] (is_x x 1000))
+(defn is_mega [x] (is_x x (pow 1000 2)))
+(defn is_giga [x] (is_x x (pow 1000 3)))
+(defn is_tera [x] (is_x x (pow 1000 4)))
+
+(defn repr_kilo [x] (+ (str (/ x 1000)) "KB"))
+(defn repr_mega [x] (+ (str (/ x (pow 1000 2))) "MB"))
+(defn repr_giga [x] (+ (str (/ x (pow 1000 3))) "GB"))
+(defn repr_tera [x] (+ (str (/ x (pow 1000 4))) "TB"))
+
+(defn human_output [x]
+  (if (is_tera x)
+      (repr_tera)
+      (do (if(is_giga x)
+             (repr_giga)
+             (do (if(is_mega x)
+                    (repr_mega x)
+                    (do (if(is_kilo x)
+                           (repr_kilo x) 42))))))))
+
+
+;; Main
+;(print(listdir "./lol"))
+                                ;(print (human_output (calc_dir "./lol")))
+(setv version "1.0")
+(setv help_text (+ "bicc " version " \nReturns the size of a File/Folder \n\nUsage: \n    bicc FILE"))
+
+(defn print_info [] (print help_text))
+
+(defn parse_arg [arg] (cond
+                        [(= arg "--help") (print help_text)]
+                        [(= arg "-V") (print version)]
+                        [True (check_path arg)]))
+
+(defn check_path [path] (if (exists path)
+                            (print (human_output (get_file_size path)))
+                            (print ("argument is not existing path"))))
+
+(defmain [&rest args]
+  (if (>= (len args) 2)
+      (parse_arg (get args 1))
+      (print_info)))
+
