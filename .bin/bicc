@@ -1,4 +1,4 @@
-#!/usr/bin/hy
+#!/usr/bin/env hy
 (require [hy.extra.anaphoric [*]])
 (import [os [listdir]])
 (import [os.path [getsize isdir exists]])
