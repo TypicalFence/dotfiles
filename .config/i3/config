@@ -33,7 +33,7 @@ font pango:monospace 8
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec sakura
+bindsym $mod+Return exec xfce4-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -160,6 +160,15 @@ bindsym XF86AudioPrev exec mpc prev
 bindsym --release Shift+Print exec gnome-screenshot -a
 bindsym --release Print exec gnome-screenshot
 
+
+# modify gaps
+bindsym Mod1+Shift+p gaps outer current plus 5
+bindsym Mod1+Shift+o gaps outer current minus 5
+bindsym Mod1+Shift+0 gaps outer current set 50
+bindsym Mod1+Shift+f gaps inner current set 0
+bindsym Mod1+Shift+i gaps inner current set 25
+
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
@@ -196,7 +205,7 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-	status_command bunbunmarustatus 1 --pulse --mpd
+	status_command bunbunmarustatus 1 --pulse --mpd --laptop
 	position top
 	font pango: Roboto 11
  	tray_output primary
