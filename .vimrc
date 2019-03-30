@@ -1,17 +1,36 @@
 call plug#begin('~/.vim/plugged')
-Plug 'https://gitlab.com/code-stats/code-stats-vim.git'
-   
-" Optional: If you want a nice status line in Vim
-Plug 'vim-airline/vim-airline'
-
 Plug 'ap/vim-buftabline'
+Plug 'airblade/vim-gitgutter'
 Plug 'scrooloose/nerdtree'
+Plug 'vim-airline/vim-airline'
+Plug 'https://gitlab.com/code-stats/code-stats-vim.git'
+
+
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  " deoplete never worked for me in vim tbh
+  " Plug 'Shougo/deoplete.nvim'
+  " Plug 'roxma/nvim-yarp'
+  " Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
+" go
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+
+
+" python
 Plug 'davidhalter/jedi-vim'
 Plug 'nvie/vim-flake8'
-Plug 'airblade/vim-gitgutter'
 
+" rust
+Plug 'racer-rust/vim-racer'
 call plug#end()
 
+if has('nvim')
+    let g:deoplete#enable_at_startup = 1
+endif
 
 scriptencoding utf-8
 
@@ -33,7 +52,7 @@ nnoremap <C-B> :bprevious<CR>
 
 
 " disable mouse
-"set mouse=a
+set mouse=a
 
 let g:codestats_api_key = 'no'
 
