@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+sudo wpa_supplicant -c "$1" -i wls1  
+
+
