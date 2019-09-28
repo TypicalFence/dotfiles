@@ -12,6 +12,7 @@
 gaps inner 25
 gaps outer 50
 for_window [class="^.*"] border pixel 0
+new_window none
 set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -46,10 +47,10 @@ bindsym $mod+d exec dmenu_run -fn 'Roboto-13'
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -58,10 +59,10 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -70,7 +71,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+h split h
+bindsym $mod+w split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -80,7 +81,7 @@ bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
+bindsym $mod+t layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
@@ -169,6 +170,7 @@ bindsym Mod1+Shift+f gaps inner current set 0
 bindsym Mod1+Shift+i gaps inner current set 25
 
 
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
@@ -210,5 +212,11 @@ bar {
 	font pango: Roboto 11
  	tray_output primary
 }
+
+
+
+
+bindsym $mod+i open
+bindsym $mod+b bar mode toggle
 
 exec ~/.init.sh
