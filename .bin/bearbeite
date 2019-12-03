@@ -1,0 +1,10 @@
+#!/bin/sh
+if [ ! -t 0 ]; then
+    file=$(cat - | fzf)
+else
+    file=$(fzf)
+fi
+
+if [ ! -z "$file" ]; then
+    $EDITOR $file
+fi
