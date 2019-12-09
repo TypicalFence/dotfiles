@@ -36,6 +36,10 @@ call plug#begin('~/.vim/plugged')
 
     " dart
     Plug 'dart-lang/dart-vim-plugin'
+
+    " erlang
+    Plug 'elixir-editors/vim-elixir'
+    Plug 'slashmili/alchemist.vim'
 call plug#end()
 
 if has('nvim')
@@ -64,6 +68,7 @@ let g:airline_section_x = airline#section#create_right(['tagbar', 'filetype'])
 
 let g:ale_linter_aliases = {'typescriptreact': 'typescript'}
 let g:ale_linter_aliases = {'javascriptreact': 'javascript'}
+let g:ale_linters = { 'java': ['javac'] }
 let g:ale_fixers = { 'javascript': ['eslint'], 'typescript': ['eslint'], 'python': ['autopep8'] }
 let g:ale_fix_on_save = 1
 "========================================================================================
@@ -105,5 +110,3 @@ call deoplete#custom#option('check_stderr', 0)
 
 let g:racer_experimental_completer = 1
 let g:racer_disable_errors = 1
-
-
