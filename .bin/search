@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+
+# ------------------------------------------------------------------------------------------------
+# Globals
+# ------------------------------------------------------------------------------------------------
+CASE="-S"
+IGNORE=""
+SEARCH_PATH=""
+REGEX=""
+
+# ------------------------------------------------------------------------------------------------
+# argument handling
+# ------------------------------------------------------------------------------------------------
+print_usage() {
+    cat <<EOF
+search
+
+searches text files recursivly and displays results nicely.
+also respects .gitignore, etc.
+
+Usage: search "some regex" (optional search path)
+Options:
+  -p / --search-path: set the path that will be searched
+Flags:
+  -s / --case-sensitive: only look for results that match the case
+  -i / --case-insensitive: ignore the case
+  -ni / --no-ignore: also look in usually ignored locations (tanks performance)
+EOF
+}
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+    -s|--case-sensitive)
+    CASE="-s"
+    shift # past argument
+    ;;
+    -i|--case-insensitive)
+    CASE="-i"
+    shift # past argument
+    ;;
+    -ni|--no-ignore)
+    IGNORE="--no-ignore"
+    shift # past argument
+    ;;
+    -h|--help)
+    HELP="yes"
+    shift # past argument
+    ;;
+    -p|--search-path)
+    SEARCH_PATH="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    *)    # unknown option
+    POSITIONAL+=("$1") # save it in an array for later
+    shift # past argument
+    ;;
+esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+if ! [ -z "$HELP" ]; then
+    print_usage
+    exit
+fi
+
+if [ -z "$1" ]; then
+    print_usage
+    exit
+else
+    REGEX="$1"
+fi
+
+# set search path when passed without a flag after the regex
+if ! [ -z "$2" ]; then
+    SEARCH_PATH="$2"
+fi
+
+# ------------------------------------------------------------------------------------------------
+# facts and logic
+# ------------------------------------------------------------------------------------------------
+search() {
+    if [ -z "$2" ]; then
+        rg --json $CASE $IGNORE "$1"
+    else 
+        rg --json $CASE $IGNORE "$1" "$2"
+    fi
+}
+
+filter_and_transform_json() {
+    echo "$1" | jq  -c '. | select( .type == "match"  ) | .data | {path: .path.text , line_number}'
+}
+
+display_results() {
+    echo "$1" | while IFS= read -r line ; do
+        file=$(echo "$line" | jq -r '.path')
+        line_number=$(echo "$line" | jq -r '.line_number')
+        line_count=$(wc -l "$file" | awk '{ print $1 }')
+        
+        start=$((line_number - 10))
+        end=$((line_number + 10))
+        
+        if [ $start -lt 0 ]; then
+            start=0
+        fi
+        
+        if [ $end -gt "$line_count" ]; then
+            end=$line_count
+        fi
+
+        bat --color always --decorations always "$file" -H "$line_number" -r "$start":"$end"
+    done
+}
+
+# ------------------------------------------------------------------------------------------------
+# main
+# ------------------------------------------------------------------------------------------------
+main() {
+    results=$(search "$REGEX" "$SEARCH_PATH")
+    results=$(filter_and_transform_json "$results")
+
+    if ! [ -z "$results" ]; then
+        display_results "$results"
+    else
+        # retry with case insensitive when CASE is set to smart
+        # smart only ignores case when the input is lowercase only
+        # when the user didn't specify anything about case sensitivity
+        # then we'll just assume that the user does not care at all
+        if  [ "$CASE" == "-S" ]; then
+            CASE="-i"
+            main
+        else
+            echo "no results :<"
+        fi
+    fi
+}
+
+main
