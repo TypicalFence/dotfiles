@@ -1,0 +1,61 @@
+8c8
+< static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
+---
+> static char *font = "Liberation Mono:pixelsize=16:antialias=true:autohint=true";
+90c90
+<     "#FF8B93",
+---
+>     "#FF5864",
+92c92
+<     "#B7FFBD",
+---
+>     "#84FF8E",
+94c94
+<     "#FEFF8C",
+---
+>     "#FEFF59",
+96c96
+<     "#9B99FF",
+---
+>     "#6966FF",
+98c98
+<     "#FFBBBA",
+---
+>     "#FF8987",
+100c100
+<     "#94D5FF",
+---
+>     "#61C1FF",
+102,103c102,103
+< 
+< 	/* 8 bright colors */
+---
+>     
+> 	/* 8 bright colors 
+111a112,128
+>     */
+> 
+> 	"black",
+> 	//"red3",
+>     "#FF8B93",
+> 	//"green3",
+>     "#B7FFBD",
+> 	//"yellow3",
+>     "#FEFF8C",
+> 	//"blue2",
+>     "#9B99FF",
+> 	//"magenta3",
+>     "#FFBBBA",
+> 	//"cyan3",
+>     "#94D5FF",
+> 	"gray90",
+> 
+117a135,136
+>     "#ffffff",
+>     "#3e2a2f"
+125,126c144,145
+< unsigned int defaultfg = 7;
+< unsigned int defaultbg = 0;
+---
+> unsigned int defaultfg = 258;
+> unsigned int defaultbg = 259;
