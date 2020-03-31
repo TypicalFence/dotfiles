@@ -2,11 +2,13 @@
 " Plugins
 "========================================================================================
 call plug#begin('~/.vim/plugged')
+    Plug 'google/vim-maktaba'
     Plug 'junegunn/rainbow_parentheses.vim'
     Plug 'ap/vim-buftabline'
     Plug 'airblade/vim-gitgutter'
     Plug 'scrooloose/nerdtree'
     Plug 'vim-airline/vim-airline'
+    Plug 'bazelbuild/vim-bazel'
 
     Plug 'w0rp/ale'
     if has('nvim')
@@ -40,6 +42,9 @@ call plug#begin('~/.vim/plugged')
     " erlang
     Plug 'elixir-editors/vim-elixir'
     Plug 'slashmili/alchemist.vim'
+
+    " php
+    Plug 'nelsyeung/twig.vim'
 call plug#end()
 
 if has('nvim')
