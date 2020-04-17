@@ -1,0 +1,78 @@
+#!/usr/bin/racket
+#lang racket/base
+
+(require racket/string)
+(require racket/match)
+(require racket/system)
+(require racket/port)
+(require json)
+
+(define identity-path (expand-user-path "~/.git-identity"))
+
+(define get-identity-files (lambda [ ] 
+    (filter (lambda [e] 
+        (string-suffix? (path->string e) ".json")) 
+        (directory-list identity-path #:build? #t))))
+
+(define get-identities (lambda [] 
+    (map (lambda [x] 
+         (call-with-input-file x read-json))
+         (get-identity-files))))
+
+(define find-identity (lambda (id) 
+        (findf (lambda (x) (equal? id (hash-ref x 'id)))
+            (get-identities))))
+
+(define find-identity-by-email (lambda (email) 
+        (findf (lambda (x) (equal? email (hash-ref x 'email)))
+            (get-identities))))
+
+(define get-git-email (lambda () 
+    (let ([output (with-output-to-string (λ () (system "git config user.email")))])
+          (string-replace output "\n" ""))))
+
+(define set-git-identity (lambda (identity) 
+        (system (format "git config user.name \"~a\"" (hash-ref identity 'name)))
+        (system (format "git config user.email \"~a\"" (hash-ref identity 'email)))))
+
+(define display-identity (lambda (identity)
+     (printf "~a\t~a\t~a\n" 
+             (hash-ref identity 'id)
+             (hash-ref identity 'name)
+             (hash-ref identity 'email))))
+
+;; commands
+(define list-identities (lambda () 
+        (for ([identity (get-identities)]) (display-identity identity))))
+
+(define set-identity (lambda (cmd-args)
+        (when (not (> (vector-length cmd-args) 1))
+              (exit))
+        (let ([id (vector-ref cmd-args 1)])
+            (let ([identity (find-identity id)])
+                (if (not identity)
+                    (displayln "identity not found")
+                    (set-git-identity identity))))))
+
+(define current-identity (lambda ()
+        (let ([identity (find-identity-by-email (get-git-email))])
+            (if (not identity)
+                (displayln "not using a known identity")
+                (display-identity identity)))))
+
+;; ensure that the path exists
+(when (not (directory-exists? identity-path))
+      (exit))
+
+;; check cmd args
+(when (not (> (vector-length (current-command-line-arguments)) 0))
+      (current-identity)
+      (exit))
+
+(define cmd (vector-ref (current-command-line-arguments) 0))
+
+(match cmd 
+    ["list" (list-identities)]
+    ["current" (current-identity)]
+    ["set" (set-identity (current-command-line-arguments))]
+    [_ (println "command not found")])
