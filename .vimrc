@@ -9,35 +9,36 @@ call plug#begin('~/.vim/plugged')
     Plug 'scrooloose/nerdtree'
     Plug 'vim-airline/vim-airline'
     Plug 'bazelbuild/vim-bazel'
-
+    Plug 'jpalardy/vim-slime'
     Plug 'w0rp/ale'
+
     if has('nvim')
       Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+      Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
     endif     
 
     " js
     Plug 'HerringtonDarkholme/yats.vim' " ts syntax
-    Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+    "Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
     Plug 'amadeus/vim-jsx', { 'for': ['javascript.jsx', 'typescript.jsx'] }
-    Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
-    Plug 'ternjs/tern_for_vim', { 'do': 'npm install && npm install -g tern' }
+    "Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
+    " Plug 'ternjs/tern_for_vim', { 'do': 'npm install && npm install -g tern' }
 
     " rust
     Plug 'rust-lang/rust.vim'
     Plug 'racer-rust/vim-racer'
 
-
     " go
-    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-    Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
-
+    " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+    " Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 
     " python
-    Plug 'deoplete-plugins/deoplete-jedi'
     Plug 'davidhalter/jedi-vim'
+    Plug 'deoplete-plugins/deoplete-jedi'
+    Plug 'hylang/vim-hy'
 
     " dart
-    Plug 'dart-lang/dart-vim-plugin'
+    " Plug 'dart-lang/dart-vim-plugin'
 
     " erlang
     Plug 'elixir-editors/vim-elixir'
@@ -45,6 +46,9 @@ call plug#begin('~/.vim/plugged')
 
     " php
     Plug 'nelsyeung/twig.vim'
+
+    " racket
+    Plug 'wlangstroth/vim-racket'
 call plug#end()
 
 if has('nvim')
@@ -63,12 +67,19 @@ set shiftwidth=4    " Indents will have a width of 4
 set softtabstop=4   " Sets the number of columns for a TAB
 set expandtab       " Expand TABs to spaces
 
+
+nnoremap <C-W> :bnext<CR>
+nnoremap <C-B> :bprevious<CR>
+nnoremap <leader>< :bnext<CR>
+nnoremap <leader>> :bprevious<CR>
+inoremap <A-h> <C-o>h
+inoremap <A-j> <C-o>j
+inoremap <A-k> <C-o>k
+inoremap <A-l> <C-o>l
+
 "========================================================================================
 " Language Agnostic
 "========================================================================================
-nnoremap <C-W> :bnext<CR>
-nnoremap <C-B> :bprevious<CR>
-
 let g:airline_section_x = airline#section#create_right(['tagbar', 'filetype'])
 
 let g:ale_linter_aliases = {'typescriptreact': 'typescript'}
@@ -86,11 +97,8 @@ let g:jedi#completions_enabled = 0
 "========================================================================================
 " Javascript 
 "========================================================================================
-let g:tern_request_timeout = 1
-let g:tern_request_timeout = 6000
-let g:tern#command = ["tern"]
-let g:tern#arguments = ["--persistent"]
 
+let g:deoplete#sources#ternjs#tern_bin = 'ternjs'
 let g:deoplete#sources#ternjs#types = 1
 let g:deoplete#sources#ternjs#depths = 1
 let g:deoplete#sources#ternjs#docs = 1
