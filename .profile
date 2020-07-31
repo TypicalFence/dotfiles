@@ -9,4 +9,5 @@ export JAVA_HOME="$(dirname $(dirname $(realpath $(which javac))))"
 alias vim=nvim
 alias vi=vim
 alias please=sudo
+alias cd..="cd .."
 . ~/.profile.local

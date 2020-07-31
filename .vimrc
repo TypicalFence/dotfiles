@@ -1,54 +1,59 @@
-"========================================================================================
+"=̉=======================================================================================
 " Plugins
 "========================================================================================
 call plug#begin('~/.vim/plugged')
     Plug 'google/vim-maktaba'
+    Plug 'tpope/vim-sensible'
+    Plug 'sheerun/vim-polyglot'
+    Plug 'junegunn/fzf'
+    Plug 'junegunn/fzf.vim'
     Plug 'junegunn/rainbow_parentheses.vim'
     Plug 'ap/vim-buftabline'
     Plug 'airblade/vim-gitgutter'
-    Plug 'scrooloose/nerdtree'
+    Plug 'scrooloose/nerdtree',  { 'on':  'NERDTreeToggle' } 
     Plug 'vim-airline/vim-airline'
-    Plug 'bazelbuild/vim-bazel'
     Plug 'jpalardy/vim-slime'
-    Plug 'w0rp/ale'
+    Plug 'bazelbuild/vim-bazel', { 'on':  'Bazel' }
 
+    Plug 'w0rp/ale'
     if has('nvim')
       Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-      Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
     endif     
 
     " js
-    Plug 'HerringtonDarkholme/yats.vim' " ts syntax
-    "Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+    if has('nvim')
+        Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern', 'for': ['javascript', 'javascript.jsx'] }
+    endif
     Plug 'amadeus/vim-jsx', { 'for': ['javascript.jsx', 'typescript.jsx'] }
-    "Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
-    " Plug 'ternjs/tern_for_vim', { 'do': 'npm install && npm install -g tern' }
+    if has('nvim')
+        Plug 'mhartington/nvim-typescript', {'do': './install.sh', 'for': ['typescript', 'typescript.jsx'] }
+    endif
+    "Plug 'ternjs/tern_for_vim', { 'do': 'npm install && npm install -g tern' }
 
     " rust
-    Plug 'rust-lang/rust.vim'
-    Plug 'racer-rust/vim-racer'
+    Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+    Plug 'racer-rust/vim-racer', { 'for': 'rust' }
+
 
     " go
-    " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-    " Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
+    Plug 'deoplete-plugins/deoplete-go', { 'do': 'make', 'for': 'go' }
+
 
     " python
-    Plug 'davidhalter/jedi-vim'
-    Plug 'deoplete-plugins/deoplete-jedi'
-    Plug 'hylang/vim-hy'
-
+    Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
+    Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+    Plug 'hylang/vim-hy', { 'for': 'hy' }
+    
     " dart
-    " Plug 'dart-lang/dart-vim-plugin'
+    Plug 'dart-lang/dart-vim-plugin', { 'for': 'dart' }
 
     " erlang
-    Plug 'elixir-editors/vim-elixir'
-    Plug 'slashmili/alchemist.vim'
-
-    " php
-    Plug 'nelsyeung/twig.vim'
-
+    Plug 'elixir-editors/vim-elixir', { 'for': 'elixir' }
+    Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
+    
     " racket
-    Plug 'wlangstroth/vim-racket'
+    Plug 'wlangstroth/vim-racket', { 'for':  ['scheme', 'racket'] }
 call plug#end()
 
 if has('nvim')
@@ -67,6 +72,7 @@ set shiftwidth=4    " Indents will have a width of 4
 set softtabstop=4   " Sets the number of columns for a TAB
 set expandtab       " Expand TABs to spaces
 
+set showcmd
 
 nnoremap <C-W> :bnext<CR>
 nnoremap <C-B> :bprevious<CR>
@@ -80,13 +86,27 @@ inoremap <A-l> <C-o>l
 "========================================================================================
 " Language Agnostic
 "========================================================================================
+
+let g:slime_target = "tmux"
 let g:airline_section_x = airline#section#create_right(['tagbar', 'filetype'])
 
 let g:ale_linter_aliases = {'typescriptreact': 'typescript'}
 let g:ale_linter_aliases = {'javascriptreact': 'javascript'}
-let g:ale_linters = { 'java': ['javac'] }
-let g:ale_fixers = { 'javascript': ['eslint'], 'typescript': ['eslint'], 'python': ['autopep8'] }
+let g:ale_linters = { 
+            \ 'java': ['javac'], 
+            \ "c": ['gcc'], 
+            \ "cpp": ['gcc'] 
+            \ }
+let g:ale_fixers = { 
+            \ 'javascript': ['eslint'], 
+            \ 'typescript': ['eslint', 'tslint'], 
+            \ 'python': ['autopep8'], 
+            \ 'elixir': ['mix_format'], 
+            \ 'rust': ['rustfmt'], 
+            \ 'java': ['uncrustify'] 
+            \ }
 let g:ale_fix_on_save = 1
+
 "========================================================================================
 " Python 
 "========================================================================================
@@ -97,8 +117,11 @@ let g:jedi#completions_enabled = 0
 "========================================================================================
 " Javascript 
 "========================================================================================
+let g:tern_request_timeout = 1
+let g:tern_request_timeout = 6000
+let g:tern#command = ["tern"]
+let g:tern#arguments = ["--persistent"]
 
-let g:deoplete#sources#ternjs#tern_bin = 'ternjs'
 let g:deoplete#sources#ternjs#types = 1
 let g:deoplete#sources#ternjs#depths = 1
 let g:deoplete#sources#ternjs#docs = 1
@@ -119,7 +142,16 @@ let g:deoplete#sources#ternjs#filetypes = [
 " Rust 
 "========================================================================================
 " hide racer crash reports
-call deoplete#custom#option('check_stderr', 0)
+if has("nvim")
+    call deoplete#custom#option('check_stderr', 0)
+endif
 
 let g:racer_experimental_completer = 1
 let g:racer_disable_errors = 1
+let g:ale_java_javac_classpath = $CLASSPATH
+
+
+let g:ale_c_gcc_executable = $CURRENT_GCC
+let g:ale_c_gcc_options = $CURRENT_GCC_OPTS
+let g:ale_cpp_gcc_executable = $CURRENT_GXX
+let g:ale_cpp_gcc_options = $CURRENT_GXX_OPTS 
