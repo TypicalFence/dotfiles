@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+"""prints the SSID of the connected wifi"""
+import sys
+import ini
+import wpa_status
+
+config = ini.parse(open("/etc/wpa_statusd.ini").read())
+client = wpa_status.Client(config["socket"])
+running_resp = wpa_status.is_supplicant_running(client)
+running = running_resp.result["SupplicantRunning"]["running"]
+
+if running:
+    status_resp = wpa_status.status(client)
+    status = status_resp.result["Status"]
+    if status["ssid"] is not None:
+        print(status["ssid"])
+        sys.exit(0)
+
+sys.exit(1)
