@@ -1,0 +1,4 @@
+network={
+    ssid="Freifunk"
+    key_mgmt=NONE
+}

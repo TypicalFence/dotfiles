@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+if wifi-sup-running; then
+    echo "wpa_supplicant already running"
+    exit 1
+fi
+
+
+if [ ! -z "$1" ]; then
+    CONFIG="$1"
+else
+    CONFIG=$(ls  ~/.wifi/ | fzf)
+    CONFIG=$(realpath "$HOME/.wifi/$CONFIG")
+fi
+
+if [ ! -z "$CONFIG" ]; then
+    sudo wpa_supplicant -c "$CONFIG" -i wls1  
+fi
+
+

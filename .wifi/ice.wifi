@@ -1,0 +1,5 @@
+ctrl_interface=/run/wpa_supplicant
+network={
+    ssid="WIFIonICE"
+    key_mgmt=NONE
+}
