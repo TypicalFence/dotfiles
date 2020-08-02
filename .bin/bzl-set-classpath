@@ -1,2 +1,0 @@
-#!/bin/sh
-export CLASSPATH=$(find bazel-bin/app.runfiles/ -name "*.jar" | xargs -L1 realpath  |  python3 -c 'import sys; print(":".join(sys.stdin.read().splitlines()))')

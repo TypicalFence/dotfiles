@@ -1,9 +1,19 @@
+# load .profile if not loaded yet
+if [ -z "${DEPLOY_ENV}" ]; then
+    . ~/.zprofile
+fi
+
 # Oh My!
 export ZSH=/home/fence/.oh-my-zsh
 ZSH_THEME="pink-fish"
 ZSH_CUSTOM=~/.zsh_custom
 plugins=(git dirpersist)
 source $ZSH/oh-my-zsh.sh
+
+# SCREAMS IN JAVA
+bzl-set-classpath() {
+    export CLASSPATH=$(find bazel-bin/tests.runfiles/ -name "*.jar" | xargs -L1 realpath  |  python3 -c 'import sys; print(":".join(sys.stdin.read().splitlines()))')
+}
 
 # gcc stuff, for getting ALE to work nicely
 DEFAULT_GCC=gcc
