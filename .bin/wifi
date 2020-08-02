@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-
+#!/bin/sh
 if wifi-sup-running; then
     echo "wpa_supplicant already running"
     exit 1
