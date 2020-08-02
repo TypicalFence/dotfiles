@@ -1,3 +1,4 @@
+ctrl_interface=/run/wpa_supplicant
 network={
     ssid="Freifunk"
     key_mgmt=NONE
