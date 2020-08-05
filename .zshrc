@@ -27,6 +27,10 @@ bzl-set-classpath() {
     export CLASSPATH=$(find bazel-bin/tests.runfiles/ -name "*.jar" | xargs -L1 realpath  |  python3 -c 'import sys; print(":".join(sys.stdin.read().splitlines()))')
 }
 
+mvn-set-classpath() {
+    export CLASSPATH=$(mvn -q exec:exec -Dexec.executable=echo -Dexec.args="%classpath")
+}
+
 # gcc stuff, for getting ALE to work nicely
 DEFAULT_GCC=gcc
 DEFAULT_GXX=g++
