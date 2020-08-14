@@ -24,7 +24,7 @@ alias ccd=cdfz
 
 # SCREAMS IN JAVA
 bzl-set-classpath() {
-    export CLASSPATH=$(find bazel-bin/tests.runfiles/ -name "*.jar" | xargs -L1 realpath  |  python3 -c 'import sys; print(":".join(sys.stdin.read().splitlines()))')
+    export CLASSPATH=$(find bazel-bin/*.runfiles/ -name "*.jar" | xargs -L1 realpath  |  python3 -c 'import sys; print(":".join(sys.stdin.read().splitlines()))')
 }
 
 mvn-set-classpath() {
